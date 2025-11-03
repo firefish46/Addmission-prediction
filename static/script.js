@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update the status bar width and color
         document.documentElement.style.setProperty('--status-bar-width', `${percentage}%`);
-        statusBar.style.backgroundColor = color; 
+        // Note: statusBar.style.backgroundColor will only work if --success-color is a standard CSS color, 
+        // otherwise, you should use document.documentElement.style.setProperty('--status-bar-color', color); 
+        // to set the CSS variable, which is a safer approach.
+        // For simplicity with your current setup, I'll rely on the status-bar::after color for the bar itself.
 
         // --- CHANGE 2: Display with % sign, rounded to 2 decimal places ---
         output.textContent = percentageValue.toFixed(2) + '%';
@@ -51,15 +54,15 @@ document.addEventListener('DOMContentLoaded', function() {
         // 1. Collect Data
         const formData = new FormData(form);
         const data = {
-            // Note: The research input needs special handling since the checkbox value is only '1' if checked
-            // We use the toggle state (checked property) to determine 0 or 1
-            'Research': researchToggle.checked ? 1 : 0 
+            // FIX: Use lowercase 'research' to match the Flask backend's numerical_features list.
+            'research': researchToggle.checked ? 1 : 0 
         };
         
         // Collect other numerical inputs
         formData.forEach((value, key) => {
-             if (key !== 'research') { // Skip the default checkbox value
-                data[key] = parseFloat(value);
+             // We skip 'research' here because we already set its value (0 or 1) correctly above.
+             if (key !== 'research') { 
+                 data[key] = parseFloat(value);
              }
         });
         
@@ -101,6 +104,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial setup of the status bar (using the CSS variable approach)
     document.documentElement.style.setProperty('--status-bar-width', `0%`);
 });
-
-
-

@@ -10,16 +10,15 @@ try:
     model = joblib.load('best_model.pkl')
     scaler = joblib.load('scaler.pkl')
     
-    # --- FIX 1: Feature names must exactly match the keys in the incoming JSON data from the front-end. ---
-    # The front-end is sending keys like 'gre_score', 'toefl_score', etc. (all lowercase/snake_case)
+    # --- FIX: Feature names MUST match the names the model was trained on (Mixed Case/Capitalized) ---
     numerical_features = [
-        'gre_score', 
-        'toefl_score', 
-        'university_rating', 
-        'sop', 
-        'lor', 
-        'cgpa', 
-        'research'
+        'GRE_Score', 
+        'TOEFL_Score', 
+        'University_Rating', 
+        'SOP', 
+        'LOR', 
+        'CGPA', 
+        'Research'
     ]
     
     print("Model and Scaler loaded successfully.")
@@ -36,27 +35,33 @@ def predict_api():
         return jsonify({'error': 'Model or scaler not loaded.'}), 500
         
     try:
-        # Get JSON data from the request body
         data = request.get_json(force=True)
         
-        # --- FIX 2: Create DataFrame using the correct, lowercased keys from the input data ---
-        # The DataFrame must be created with the columns in the exact order the model expects.
-        # We ensure the values are extracted in the correct order defined by numerical_features.
-        input_values = [data[col] for col in numerical_features]
+        # 1. Map incoming lowercase keys from the front-end to the model's expected capitalized keys.
+        # This creates a dictionary with the correct feature names and values.
+        mapped_data = {
+            'GRE_Score': data.get('gre_score'),
+            'TOEFL_Score': data.get('toefl_score'),
+            'University_Rating': data.get('university_rating'),
+            'SOP': data.get('sop'),
+            'LOR': data.get('lor'),
+            'CGPA': data.get('cgpa'),
+            'Research': data.get('research')
+        }
+        
+        # 2. Convert to DataFrame, ensuring columns are in the exact order the model expects.
+        input_values = [mapped_data[col] for col in numerical_features]
         input_df = pd.DataFrame([input_values], columns=numerical_features)
         
-        # Scale the input data
-        # Note: input_df[numerical_features] is now correct because the DataFrame columns match the list.
+        # 3. Scale the input data
         input_scaled_array = scaler.transform(input_df[numerical_features])
         input_scaled = pd.DataFrame(input_scaled_array, columns=numerical_features)
         
-        # Make prediction
+        # 4. Make prediction
         prediction = model.predict(input_scaled)
         
-        # Convert NumPy float to standard Python float
+        # Convert NumPy float to standard Python float and clip the prediction
         predicted_chance_python_float = float(prediction[0])
-        
-        # Clip the prediction to be between 0 and 1, as chances can't be negative or > 1
         predicted_chance_clipped = np.clip(predicted_chance_python_float, 0.0, 1.0)
         
         # Return the prediction as JSON
@@ -67,7 +72,7 @@ def predict_api():
     except Exception as e:
         # Log the error for debugging
         print(f"Prediction API Error: {e}")
-        # Return a JSON error message instead of an HTML page
+        # Return a JSON error message
         return jsonify({'error': f'An unexpected error occurred: {str(e)}'}), 500
 
 # --- Web Interface Endpoint ---
@@ -78,25 +83,23 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # This function is not used by the front-end (which uses /predict_api), but we should fix its logic too.
     if model is None or scaler is None:
         return render_template('index.html', prediction_text="Error: Model or scaler not loaded.")
 
-    # Get data from the form
-    # Note: request.form.get() uses the correct HTML field names (lowercased)
-    features = [
-        request.form.get('gre_score'),
-        request.form.get('toefl_score'),
-        request.form.get('university_rating'),
-        request.form.get('sop'),
-        request.form.get('lor'),
-        request.form.get('cgpa'),
-        request.form.get('research')
-    ]
-    
+    # We must map the incoming lowercase form data keys to the model's expected keys
     try:
-        # Convert to a single row DataFrame
-        input_data = pd.DataFrame([np.array(features, dtype=float)], columns=numerical_features)
+        mapped_data = {
+            'GRE_Score': request.form.get('gre_score'),
+            'TOEFL_Score': request.form.get('toefl_score'),
+            'University_Rating': request.form.get('university_rating'),
+            'SOP': request.form.get('sop'),
+            'LOR': request.form.get('lor'),
+            'CGPA': request.form.get('cgpa'),
+            'Research': request.form.get('research')
+        }
+        
+        input_values = [mapped_data[col] for col in numerical_features]
+        input_data = pd.DataFrame([np.array(input_values, dtype=float)], columns=numerical_features)
         
         # Scale and predict
         input_scaled_array = scaler.transform(input_data[numerical_features])
@@ -115,3 +118,4 @@ def predict():
 
 if __name__ == "__main__":
     app.run(debug=True)
+    
