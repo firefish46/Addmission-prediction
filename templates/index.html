@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎓 Graduate Admission Predictor</title>
-    <!-- Link to the external CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Link to Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🎓 Graduate Admission Chance Predictor</h1>
-            <p>Input your profile details to estimate your chance of admission (out of 1.0).</p>
+            <p>Using AI to  estimate your chance of admission.</p>
         </header>
 
         <main class="prediction-app">
@@ -21,68 +19,113 @@
                 <h2>Your Profile Scores</h2>
                 <form id="prediction-form">
                     
-                    <!-- ROW 1: GRE and TOEFL -->
-                    <div class="input-row-group">
-                        <div class="input-group">
-                            <label for="gre_score"><i class="fas fa-pencil-alt"></i> GRE Score (out of 340)</label>
-                            <input type="number" step="1" name="gre_score" id="gre_score" required min="260" max="340" value="320">
-                            <p class="info-text">Graduate Record Examination score.</p>
+                    <!-- Vertical Slider Group -->
+                    <div class="vertical-sliders-group">
+                        
+                        <!-- 1. GRE Score (Vertical Slider) -->
+                        <div class="input-group vertical-slider-item">
+                            <label for="gre_score"><i class="fas fa-pencil-alt"></i> GRE</label>
+                            <div class="slider-container">
+                                <!-- Changed to type="range" -->
+                                <input type="range" step="1" name="gre_score" id="gre_score" required min="260" max="340" value="320" class="styled-slider">
+                                <!-- Value display required for range input -->
+                                <span class="slider-value" id="gre_score_value">320</span>
+                            </div>
+                            <p class="info-text">260-340</p>
                         </div>
 
-                        <div class="input-group">
-                            <label for="toefl_score"><i class="fas fa-book"></i> TOEFL Score (out of 120)</label>
-                            <input type="number" step="1" name="toefl_score" id="toefl_score" required min="90" max="120" value="110">
-                            <p class="info-text">Test of English as a Foreign Language score.</p>
+                        <!-- 2. TOEFL Score (Vertical Slider) -->
+                        <div class="input-group vertical-slider-item">
+                            <label for="toefl_score"><i class="fas fa-book"></i> TOEFL</label>
+                            <div class="slider-container">
+                                <!-- Changed to type="range" -->
+                                <input type="range" step="1" name="toefl_score" id="toefl_score" required min="90" max="120" value="110" class="styled-slider">
+                                <span class="slider-value" id="toefl_score_value">110</span>
+                            </div>
+                            <p class="info-text">90-120</p>
                         </div>
+
+                        <!-- 3. SOP Score (Vertical Slider) -->
+                        <div class="input-group vertical-slider-item">
+                            <label for="sop"><i class="fas fa-file-alt"></i> SOP</label>
+                            <div class="slider-container">
+                                <!-- Changed to type="range" -->
+                                <input type="range" step="0.5" name="sop" id="sop" required min="1.0" max="5.0" value="4.0" class="styled-slider">
+                                <span class="slider-value" id="sop_value">4.0</span>
+                            </div>
+                            <p class="info-text">1.0-5.0</p>
+                        </div>
+
+                        <!-- 4. LOR Score (Vertical Slider) -->
+                        <div class="input-group vertical-slider-item">
+                            <label for="lor"><i class="fas fa-envelope"></i> LOR</label>
+                            <div class="slider-container">
+                                <!-- Changed to type="range" -->
+                                <input type="range" step="0.5" name="lor" id="lor" required min="1.0" max="5.0" value="4.0" class="styled-slider">
+                                <span class="slider-value" id="lor_value">4.0</span>
+                            </div>
+                            <p class="info-text">1.0-5.0</p>
+                        </div>
+
+                        <!-- 5. CGPA (Vertical Slider) -->
+                        <div class="input-group vertical-slider-item">
+                            <label for="cgpa"><i class="fas fa-graduation-cap"></i> CGPA</label>
+                            <div class="slider-container">
+                                <!-- Changed to type="range" -->
+                                <input type="range" step="0.01" name="cgpa" id="cgpa" required min="6.0" max="10.0" value="8.5" class="styled-slider">
+                                <span class="slider-value" id="cgpa_value">8.50</span>
+                            </div>
+                            <p class="info-text">6.0-10.0</p>
+                        </div>
+
                     </div>
-
-                    <!-- ROW 2: University Rating and SOP -->
-                    <div class="input-row-group">
-                        <div class="input-group">
-                            <label for="university_rating"><i class="fas fa-star"></i> University Rating (1-5)</label>
-                            <input type="number" name="university_rating" id="university_rating" required min="1" max="5" value="4">
-                            <p class="info-text">Ranking strength of the University (1=Poor, 5=Excellent).</p>
-                        </div>
-
-                        <div class="input-group">
-                            <label for="sop"><i class="fas fa-file-alt"></i> SOP Score (1-5)</label>
-                            <input type="number" step="0.5" name="sop" id="sop" required min="1" max="5" value="4.0">
-                            <p class="info-text">Statement of Purpose strength score.</p>
-                        </div>
-                    </div>
+                    <!-- END: vertical-sliders-group -->
                     
-                    <!-- ROW 3: LOR and CGPA -->
-                    <div class="input-row-group">
-                        <div class="input-group">
-                            <label for="lor"><i class="fas fa-envelope"></i> LOR Score (1-5)</label>
-                            <input type="number" step="0.5" name="lor" id="lor" required min="1" max="5" value="4.0">
-                            <p class="info-text">Letter of Recommendation strength score.</p>
+                    <!-- University Rating (Star Rating - Now uses range input for consistency) -->
+                     <div class="rating_research">
+                    <div class="input-group">
+                        <label for="university_rating"><i class="fas fa-star"></i> University Rating (1-5)</label>
+                        
+                        <div class="star-rating" id="university_rating_container">
+                            <!-- This should ideally be a set of radio buttons for true star input, 
+                                but for simplicity and data collection, we'll use a number field/select or the original structure. 
+                                Since your original HTML used a number field, I'll update it to use a proper star selection element for better UX. -->
+                            <input type="radio" id="rating-5" name="university_rating" value="5" required />
+                            <label for="rating-5" title="5 Stars"></label>
+                            
+                            <input type="radio" id="rating-4" name="university_rating" value="4" required checked />
+                            <label for="rating-4" title="4 Stars"></label>
+                            
+                            <input type="radio" id="rating-3" name="university_rating" value="3" required />
+                            <label for="rating-3" title="3 Stars"></label>
+                            
+                            <input type="radio" id="rating-2" name="university_rating" value="2" required />
+                            <label for="rating-2" title="2 Stars"></label>
+                            
+                            <input type="radio" id="rating-1" name="university_rating" value="1" required />
+                            <label for="rating-1" title="1 Star"></label>
                         </div>
-
-                        <div class="input-group">
-                            <label for="cgpa"><i class="fas fa-graduation-cap"></i> CGPA (out of 10)</label>
-                            <input type="number" step="0.01" name="cgpa" id="cgpa" required min="6.0" max="10.0" value="8.5">
-                            <p class="info-text">Cumulative Grade Point Average.</p>
-                        </div>
+                        
+                        <p class="info-text">Ranking strength of the University (1=Poor, 5=Excellent).</p>
                     </div>
-                    
-                    <!-- ROW 4: Research Experience (Single element) -->
-                    <div class="input-group toggle-group">
-                        <label><i class="fas fa-microscope"></i> Research Experience</label>
+
+                    <!-- Research Experience (Toggle - Stays Horizontal) -->
+                    <div class="input-group">
+                        <label class="toggle-label"><i class="fas fa-microscope"></i> Research Experience</label>
                         <div class="toggle-switch">
                             <input type="checkbox" id="research_toggle" name="research" value="1" checked>
                             <label for="research_toggle"></label>
                         </div>
-                        <p class="info-text">Check if you have prior research experience.</p>
+                        <p class="info-text">Check if you have prior research experience (0 for No, 1 for Yes).</p>
                     </div>
-                    
-                    <!-- STICKY FOOTER FOR BUTTON -->
+                </div>
                     <div class="form-footer">
                         <button type="submit" class="predict-button" id="predict-btn">
                             <i class="fas fa-arrow-right"></i> Calculate Chance
                         </button>
                         <div class="loading-spinner" id="loading-spinner"></div>
                     </div>
+                   
                 </form>
             </section>
 
@@ -90,8 +133,8 @@
                 <h2>Prediction Result</h2>
                 <div class="prediction-box">
                     <div class="score-label">Predicted Chance:</div>
-                    <div class="score-value" id="prediction-output">--%</div>
-                    <div class="result-message" id="result-message">Enter your details and click 'Calculate Chance'.</div>
+                    <div class="score-value" id="prediction-output">--</div>
+                    <div class="result-message" id="result-message">Toggle the sliders  and click 'Calculate Chance'.</div>
                     <div class="status-bar" id="status-bar"></div>
                 </div>
 
@@ -108,7 +151,6 @@
         </main>
     </div>
 
-    <!-- Link to the external JavaScript file -->
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

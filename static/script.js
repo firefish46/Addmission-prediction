@@ -7,6 +7,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const button = document.getElementById('predict-btn');
     const researchToggle = document.getElementById('research_toggle');
 
+    // CRITICAL CHECK: Ensure all required elements are found before proceeding.
+    if (!output || !message || !statusBar || !spinner || !button || !researchToggle) {
+        console.error("Initialization Error: One or more required UI elements (output, message, statusBar, spinner, button, researchToggle) are missing from index.html. Please ensure all required IDs are present.");
+        return; // Stop script execution if UI is incomplete
+    }
+
+    // --- NEW: Slider Event Listeners for Range Inputs ---
+    const sliderIds = ['gre_score', 'toefl_score', 'sop', 'lor', 'cgpa'];
+    sliderIds.forEach(id => {
+        const slider = document.getElementById(id);
+        const valueSpan = document.getElementById(`${id}_value`);
+        if (slider && valueSpan) {
+            
+            // Function to format the value (2 decimals for CGPA, SOP, LOR)
+            const updateValue = () => {
+                const step = parseFloat(slider.getAttribute('step'));
+                let value = parseFloat(slider.value);
+                
+                // Format with 2 decimals if step is less than 1 (e.g., 0.5 or 0.01)
+                const formattedValue = step < 1 ? value.toFixed(2) : value;
+                valueSpan.textContent = formattedValue;
+            };
+
+            // Update on initial load
+            updateValue(); 
+            
+            // Update on drag/change
+            slider.addEventListener('input', updateValue);
+        }
+    });
+    // --- END NEW: Slider Event Listeners ---
+
+
     // Helper function to update the status bar color and message based on chance
     function updateResultDisplay(chance) {
         let color, statusText;
@@ -25,23 +58,21 @@ document.addEventListener('DOMContentLoaded', function() {
             statusText = 'Lower Chance. Consider improvements or backup options.';
         }
 
-        // --- CHANGE 1: Convert to Percentage ---
+        // --- Convert to Percentage ---
         const percentageValue = chance * 100;
         const percentage = Math.min(100, Math.round(percentageValue)); 
         
         // Update the status bar width and color
         document.documentElement.style.setProperty('--status-bar-width', `${percentage}%`);
-        // Note: statusBar.style.backgroundColor will only work if --success-color is a standard CSS color, 
-        // otherwise, you should use document.documentElement.style.setProperty('--status-bar-color', color); 
-        // to set the CSS variable, which is a safer approach.
-        // For simplicity with your current setup, I'll rely on the status-bar::after color for the bar itself.
+        statusBar.style.backgroundColor = color; 
 
-        // --- CHANGE 2: Display with % sign, rounded to 2 decimal places ---
+        // --- Display with % sign, rounded to 2 decimal places ---
         output.textContent = percentageValue.toFixed(2) + '%';
         
         message.textContent = statusText;
         output.style.color = color;
     }
+    
     // Function to handle the form submission
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -54,8 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 1. Collect Data
         const formData = new FormData(form);
         const data = {
-            // FIX: Use lowercase 'research' to match the Flask backend's numerical_features list.
-            'research': researchToggle.checked ? 1 : 0 
+            'Research': researchToggle.checked ? 1 : 0 
         };
         
         // Collect other numerical inputs
