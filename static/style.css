@@ -410,19 +410,19 @@ header p {
     align-items: center;
 }
 .predict-button:active{
-      background-color: #303f9f;
+      background-color: #6495e0c5 ;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(63, 81, 181, 0.4);
     width: 100%;
     transition: ease 5s;
 }
 .predict-button {
-
+    font-family: 'Poppins',sans-serif;
     padding: 15px;
-    background-color:#6496e0;
+    background-color:#303f9f;
     color: white;
     border: none;
-    width: 200px;
+    width: 230px;
     border-radius: 8px;
     font-size: 1.1em;
     font-weight: 600;
@@ -481,4 +481,162 @@ header p {
         width: 20%; /* Give it a decent fixed width on mobile */
         margin-right: 15px;
     }
+}
+
+/* Basic Reset and Variables (Optional but recommended) */
+:root {
+    --footer-bg: #7c7d7e; /* Dark background */
+    --footer-text: #ecf0f1; /* Light text */
+    --footer-accent: #161616; /* Blue accent color */
+
+}
+
+/* 1. General Footer Styling */
+.footer {
+        font-family: 'Poppins', sans-serif;
+    margin-top: 2%;
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
+    padding: 20px 20px 10px; /* Top, sides, bottom padding */
+   
+    border-radius: 10px;
+}
+
+.footer-container {
+    max-width: 1200px; /* Limit width on large screens */
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+    justify-content: space-between; /* Space out the main sections */
+    align-items: flex-start;
+    padding-bottom: 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 2. Brand Section */
+.footer-brand h3 {
+    margin: 0;
+    font-size: 1.5em;
+    color: var(--footer-accent);
+}
+
+/* 3. Navigation Links */
+.footer-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Display links side-by-side */
+    gap: 20px;
+}
+
+.footer-nav a {
+    color: var(--footer-text);
+    text-decoration: none;
+    font-weight: 500;
+    /* Smooth Transition for hover effect */
+    transition: color 0.3s ease-in-out; 
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus {
+    color: var(--footer-accent);
+}
+
+/* 4. Social Icons */
+.footer-social a {
+    color: var(--footer-text);
+    font-size: 1.2em;
+    margin-left: 15px;
+    text-decoration: none;
+    /* Smooth Transition for hover effect */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; 
+}
+
+.footer-social a:hover,
+.footer-social a:focus {
+    color: var(--footer-accent);
+    transform: translateY(-3px); /* Subtle lift effect */
+}
+
+/* 5. Copyright Bottom Bar */
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* 6. Responsiveness (Media Query) */
+/* Stack elements vertically on screens smaller than 768px */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center; /* Center items when stacked */
+        text-align: center;
+        gap: 25px; /* Add space between stacked items */
+    }
+
+    .footer-nav ul {
+        flex-direction: column; /* Stack navigation links vertically */
+        gap: 10px;
+    }
+
+    .footer-social {
+        /* Add some margin to separate from other sections */
+        margin-top: 10px; 
+    }
+
+    .footer-social a {
+        margin: 0 10px; /* Space out the social icons */
+    }
+}
+/* --- 4. Social Icons (UPDATED) --- */
+.footer-social a {
+    /* Keep these styles for all social icons */
+    color: var(--footer-text); /* Default color (white/light gray from original) */
+    font-size: 1.2em;
+    margin-left: 15px;
+    text-decoration: none;
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.footer-social a:hover,
+.footer-social a:focus {
+    /* General hover effect for non-Instagram icons */
+    color: var(--footer-accent);
+    transform: translateY(-3px);
+}
+
+/* --- Instagram-Specific Styles --- 
+   This uses the actual brand gradient colors for the hover effect.
+*/
+
+/* 1. Target the Instagram icon on hover (using its class 'fa-instagram' from Font Awesome) */
+.footer-social a:hover .fa-instagram {
+    /* Instagram Gradient Colors (Sunset/Vibrant) */
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+
+    /* Crucial for applying the background to the text (icon) */
+    -webkit-background-clip: text; /* For Chrome/Safari */
+    background-clip: text;
+transform: translateY(-3px);
+    /* Makes the text/icon transparent so the background shows through */
+    -webkit-text-fill-color: transparent; /* For Chrome/Safari */
+    color: transparent; /* Fallback and for other browsers */
+
+    /* The 'transform' smooth effect is already applied to the parent <a>
+       but you might need to override the parent's color change:
+    */
+    color: transparent; 
+    
+    /* Ensure the gradient change is smooth */
+    transition: all 0.5s ease-in-out; 
+}
+.hlink{
+    color: orange;
+}
+.hlink:hover{
+    color: #4caf50;
+   
+    transition: all .3s;
 }

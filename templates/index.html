@@ -6,11 +6,14 @@
     <title>🎓 Graduate Admission Predictor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" />
+
 </head>
 <body>
     <div class="container">
         <header>
             <h1>🎓 Graduate Admission Chance Predictor</h1>
+            
             <p>Using AI to  estimate your chance of admission.</p>
         </header>
 
@@ -140,10 +143,10 @@
 
                 <div class="model-info">
                     <h3>Model Details</h3>
-                    <p>This prediction uses the **LGBM Regressor** (Light Gradient Boosting Machine), which achieved the highest R-squared score on the validation set.</p>
+                    <p>This prediction uses the <a  href="https://docs.cloud.google.com/python/docs/reference/bigframes/latest/bigframes.ml.ensemble.XGBRegressor" style="text-decoration: none; " ><span class="hlink">XGBRegressor</span></a> (gradient boosting  Machine), which achieved the highest R-squared score on the validation set.</p>
                     <p>Model Performance (Validation):</p>
                     <ul>
-                        <li><i class="fas fa-chart-line"></i> **R-squared (R²):** Approximately 0.85+</li>
+                        <li><i class="fas fa-chart-line"></i> **R-squared (R²):** Approximately 0.94+</li>
                         <li><i class="fas fa-ruler-combined"></i> **MAE:** Approximately 0.05</li>
                     </ul>
                 </div>
@@ -153,4 +156,33 @@
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-brand">
+            <h3>Machine learning</h3>
+        </div>
+
+        <nav class="footer-nav">
+            <ul>
+                <li><a href="#home"><i class="fa-solid fa-house"></i>&nbsp;Home</a></li>|
+                <li><a href="#services"><i class="fa-solid fa-wrench"></i>&nbsp;Services</a></li>|  
+                <li><a href="#about"><i class="fa-regular fa-circle-question"></i>&nbsp;About Us</a></li>|
+                <li><a href="#contact"><i class="fa-solid fa-phone"></i>&nbsp;Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="footer-social" style="display: flex;">
+            <a href="https://facebook.com/mh.ethin" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://twitter.com" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://linkedin.com" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+           <div class="footer-social">
+    <a href="https://instagram.com/firefish_46" aria-label="Instagram"><i class="fab fa-instagram"></i></a> 
+</div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 Bijon mallik . All rights reserved.</p>
+    </div>
+</footer>
 </html>
